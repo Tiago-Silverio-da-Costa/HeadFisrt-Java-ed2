@@ -39,7 +39,7 @@ public class BeatBox {
         stop.addActionListener(new MyStopListener());
         buttonBox.add(stop);
 
-        JButton upTempo = new JButton("Tempo Up");
+        JButton upTempo = new JButton("T empo Up");
         upTempo.addActionListener(new MyUpTempoListener());
         buttonBox.add(upTempo);
 

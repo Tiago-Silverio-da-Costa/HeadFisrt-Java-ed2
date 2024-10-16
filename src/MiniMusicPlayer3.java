@@ -1,4 +1,6 @@
 import javax.sound.midi.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
@@ -78,6 +80,56 @@ public class MiniMusicPlayer3 {
 
             g.fillRect(x,y,height,width);
             msg = false;
+        }
+    }
+
+    public class MySendListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean [] checkboxState = new boolean[256];
+
+            for (int i = 0; i < 256; i++) {
+                JCheckBox check = (JCheckBox) checkboxList.get(i);
+                if (check.isSelected()) {
+                    checkboxState[i] = true;
+                }
+            }
+
+            try {
+                FileOutputStream fileStream = new FileOutputStream(new File("Checkbox.ser"));
+                ObjectOutputStream os = new ObjectOutputStream(fileStream);
+                os.writeObject(checkboxState);
+            }catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public class MyReadListner implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean [] checkboxState = null;
+
+            try {
+                FileInputStream fileIn = new FileInputStream(new File("Checkbox.ser"));
+                ObjectInputStream is = new ObjectInputStream(fileIn);
+                checkboxState = (boolean[])  is.readObject();
+
+            }catch (Exception ex) {ex.printStackTrace();}
+
+            for (int i = 0; i < 256; i++) {
+                JCheckBox check = (JCheckBox) checkboxList.get(i);
+                if(checkboxState[i]) {
+                    check.setSelected(true);
+                } else {
+                    check.setSelected(false);
+                }
+            }
+
+            sequencer.stop();
+            buildTrackAndStart();
         }
     }
 }
